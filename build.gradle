@@ -13,7 +13,7 @@ apply plugin: 'maven' // make pom files for deployment
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = "com.netflix.bdp.s3"
-version = '0.5.5'
+version = '0.5.7'
 
 repositories {
   mavenCentral()

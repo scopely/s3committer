@@ -107,6 +107,9 @@ public class S3PartitionedOutputCommitter extends S3MultipartOutputCommitter {
         .getFileSystem(context.getConfiguration());
     Set<Path> partitions = Sets.newLinkedHashSet();
     for (S3Util.PendingUpload commit : pending) {
+      if (commit == null) {
+        throw new IllegalStateException("Commit was null. Taken from " + pending);
+      }
       Path filePath = new Path(
           "s3://" + commit.getBucketName() + "/" + commit.getKey());
       partitions.add(filePath.getParent());
