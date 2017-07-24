@@ -42,11 +42,6 @@ public class S3PartitionedOutputCommitter extends S3MultipartOutputCommitter {
   private static final Logger LOG = LoggerFactory.getLogger(
       S3PartitionedOutputCommitter.class);
 
-  public S3PartitionedOutputCommitter(Path outputPath, JobContext context)
-      throws IOException {
-    super(outputPath, context);
-  }
-
   public S3PartitionedOutputCommitter(Path outputPath,
                                       TaskAttemptContext context)
       throws IOException {
@@ -112,6 +107,9 @@ public class S3PartitionedOutputCommitter extends S3MultipartOutputCommitter {
         .getFileSystem(context.getConfiguration());
     Set<Path> partitions = Sets.newLinkedHashSet();
     for (S3Util.PendingUpload commit : pending) {
+      if (commit == null) {
+        throw new IllegalStateException("Commit was null. Taken from " + pending);
+      }
       Path filePath = new Path(
           "s3://" + commit.getBucketName() + "/" + commit.getKey());
       partitions.add(filePath.getParent());
